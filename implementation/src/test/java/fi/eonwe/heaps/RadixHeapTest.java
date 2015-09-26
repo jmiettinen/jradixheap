@@ -33,7 +33,7 @@ public class RadixHeapTest {
 
         for (int i = 0; i < numbers.length; i++) {
             numbers[i] = rng.nextInt(50_000);
-            heap.insert(i, numbers[i]);
+            heap.insert(numbers[i], i);
             assertEquals(i+1, heap.size());
         }
 
@@ -62,7 +62,7 @@ public class RadixHeapTest {
         for (int i = numbers.length - 1; i >= 0; i--) {
             long val = numbers[i];
             int newKey = RadixHeap.extractKey(val) % divisor;
-            heap.decreaseKey(val, newKey);
+            heap.decreaseKey(newKey, val);
             assertEquals(count, heap.size());
         }
         for (int i = 0; i < count; i++) {
@@ -107,7 +107,7 @@ public class RadixHeapTest {
             FibonacciHeapNode<Integer> node = new FibonacciHeapNode<>(i);
             nodes.add(node);
             int key = i + 1;
-            rHeap.insert(node.getData(), key);
+            rHeap.insert(key, node.getData());
             fHeap.insert(node, key);
         }
         while (!fHeap.isEmpty()) {
@@ -117,13 +117,13 @@ public class RadixHeapTest {
                 int oldKey = (int) node.getKey();
                 int newKey = oldKey - 1;
                 fHeap.decreaseKey(node, newKey);
-                rHeap.decreaseKey(RadixHeap.createFrom(node.getData(), oldKey), newKey);
+                rHeap.decreaseKey(newKey, RadixHeap.createFrom(node.getData(), oldKey));
             }
             while (rng.nextBoolean()) {
                 FibonacciHeapNode<Integer> newNode = new FibonacciHeapNode<>(insertCounter++);
                 nodes.add(newNode);
                 int key = insertCounter;
-                rHeap.insert(newNode.getData(), key);
+                rHeap.insert(key, newNode.getData());
                 fHeap.insert(newNode, key);
             }
 

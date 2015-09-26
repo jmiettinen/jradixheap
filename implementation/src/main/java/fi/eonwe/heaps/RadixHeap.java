@@ -63,11 +63,11 @@ public class RadixHeap {
 
     /**
      *
-     * @param data data
      * @param key any value barring {@linkplain #UNAVAILABLE_KEY}
-     * @return a long comprising of both the data and key. Can be used by {@linkplain #decreaseKey(long, int)} to change the key.
+     * @param data data
+     * @return a long comprising of both the data and key. Can be used by {@linkplain #decreaseKey(int, long)} to change the key.
      */
-    public long insert(int data, int key) {
+    public long insert(int key, int data) {
         if (key == UNAVAILABLE_KEY) {
             throw new IllegalArgumentException("Key must not be " + UNAVAILABLE_KEY);
         }
@@ -80,11 +80,11 @@ public class RadixHeap {
 
     /**
      * Upda
-     * @param packedVal packed value consisting of both key and data
      * @param newKey any value barring {@linkplain #UNAVAILABLE_KEY}
+     * @param packedVal packed value consisting of both key and data
      * @return a long comprising of both the data and and new key.
      */
-    public long decreaseKey(long packedVal, int newKey) {
+    public long decreaseKey(int newKey, long packedVal) {
         if (newKey == UNAVAILABLE_KEY) {
             throw new IllegalArgumentException("Key must not be " + UNAVAILABLE_KEY);
         }
@@ -112,7 +112,7 @@ public class RadixHeap {
             }
             array.remove(lastIndex);
             size--;
-            return insert(extractData(packedVal), newKey);
+            return insert(newKey, extractData(packedVal));
         }
         throw new IllegalArgumentException("Cannot decrease the key under last deleted key (-> " + newKey + " when last deleted was " + lastDeleted + ")");
     }
@@ -130,7 +130,7 @@ public class RadixHeap {
                 @Override
                 public void apply(long value) {
                     if (value != packedVal) {
-                        RadixHeap.this.insert(extractData(value), extractKey(value));
+                        RadixHeap.this.insert(extractKey(value), extractData(value));
                         size--;
                     }
                 }
