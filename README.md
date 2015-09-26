@@ -1,2 +1,2 @@
 # jradixheap
-Radix heap for Java primitive ints pointing with int keys
+Radix heap of java ints with int keys.
